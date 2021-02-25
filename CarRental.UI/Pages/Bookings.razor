@@ -1,0 +1,79 @@
+﻿@page "/rental"
+@using CarRental.Business.Classes
+@using CarRental.Common.Interfaces
+@inject BookingProcessor BP
+
+<h1>Car Rental</h1>
+<h3>Bookings</h3>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table table-hover" style="border: 1px solid">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">RegNo</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Km Reneted</th>
+                    <th scope="col">Km Returned</th>
+                    <th scope="col">Reneted</th>
+                    <th scope="col">Returned</th>
+                    <th scope="col">Cost</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var booking in bookings)
+                {
+                    <tr>
+                        <th scope="row">@booking.RegistrationNumber</th>
+                        <td>@booking.Person.ToString()</td>
+                        <td>@booking.OdometerRented</td>
+                        <td>
+                            @if (booking.OdometerReturned != default)
+                            {
+                                @booking.OdometerReturned
+                            }
+                        </td>
+                        <td>@booking.Rented.ToShortDateString()</td>
+                        <td>
+                            @if (booking.Returned != default)
+                            {
+                                @booking.Returned.ToShortDateString()
+                            }
+                        </td>
+                        <td>
+                            @if (booking.Cost != default)
+                            {
+                                @booking.Cost.ToString("NO")
+                            }
+                        </td>
+                        <td>
+                            @if (booking.Returned == default)
+                            {
+                                <span href="#" class="badge badge-danger">Open</span>
+                            }
+                            else
+                            {
+                                <span href="#" class="badge badge-success">Closed</span>
+                            }
+                            </td>
+                    </tr>
+                }
+            </tbody>
+        </table> 
+    </div>
+
+
+</div>
+
+
+@code{
+    IEnumerable<IBooking> bookings;
+
+    protected override void OnInitialized()
+    {
+        bookings = BP.GetBookings();
+    }
+
+
+}

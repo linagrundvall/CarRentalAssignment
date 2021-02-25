@@ -1,0 +1,151 @@
+﻿@page "/vehicle"
+@using CarRental.Business.Classes
+@using CarRental.Common.Interfaces
+@using CarRental.Common.Enums
+@inject BookingProcessor BP
+
+<h1>Car Rental Assignment - VG</h1>
+<h3>Vehicles</h3>
+
+@if (error != string.Empty)
+{
+    <div class="row">
+        <div class="col-12 alert alert-danger" role="alert">
+            <strong>Error</strong> @error
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12">
+        <table class="table table-hover" style="border: 1px solid">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">RegNo</th>
+                    <th scope="col">Make</th>
+                    <th scope="col">Odometer</th>
+                    <th scope="col">Cost Km</th>
+                    <th scope="col">Vehicle Type</th>
+                    <th scope="col">$ Day</th>
+                    <th scope="col" style="width:177px;">Action</th>
+                    <th scope="col" style="width:95px!important">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row"><input style="height:31px;" placeholder="RegNo" @bind="registrationNumber" /></th>
+                    <td><input style="height:31px;" placeholder="Make" @bind="make" /></td>
+                    <td><input style="height:31px;" placeholder="Odometer" @bind="odometer" /></td>
+                    <td><input style="height:31px;" placeholder="Cost Km" @bind="costKm" /></td>
+                    <td>
+                        <select style="height:31px;" @bind="selectedVehicleType">
+                            @foreach (var type in BP.VehicleTypeNames)
+                            {
+                                <option value=@type>@type</option>
+                            }
+                        </select>
+                    </td>
+                    <td style="border-right:1px dashed lightgray"><button class="btn btn-outline-success btn-sm" @onclick="AddVehicle">Add</button></td>
+                    <td>
+                        <select style="height:31px;" @bind="selectedCustomerId">
+                            @foreach (var customer in BP.GetCustomers())
+                            {
+                                <option value=@customer.Id>@customer.ToString()</option>
+                            }
+                        </select>
+                    </td>
+                    <td><input style="width:100%; height:31px;" placeholder="Distance" @bind="distance" /></td>
+                </tr>
+
+                @foreach (var vehicle in vehicles)
+                {
+                    <tr>
+                        @*css styleing for th and td*@
+                        <th scope="row">@vehicle.RegistrationNumber</th>
+                        <td>@vehicle.Make</td>
+                        <td>@vehicle.Odometer</td>
+                        <td>@vehicle.CostKm</td>
+                        <td>@vehicle.Type</td>
+                        <td>@vehicle.CostDay</td>
+                        <td>
+                            @if (vehicle.Status.Equals(VehicleStatuses.Booked))
+                            {
+                                <button style="width:100%;" class="btn btn-outline-danger btn-sm" @onclick="@(e => ReturnVehicle(vehicle.Id))">Return</button>
+                            }
+                            else
+                            {
+                                <button style="width:100%;" class="btn btn-outline-primary btn-sm" @onclick="@(e => RentVehicle(vehicle.Id))">Rent</button>
+                            }
+                        </td>
+                        <td><span class="badge badge-@(vehicle.Status.Equals(VehicleStatuses.Available) ? "dark" : "danger") badge-pill float-right" style="margin-top:3px;">@vehicle.Status</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+@code {
+    //vehicles
+    string error = string.Empty;
+    string registrationNumber = string.Empty;
+    string make = string.Empty;
+    string odometer = string.Empty;
+    string costKm = string.Empty;
+    string selectedVehicleType = default;
+    string selectedCustomerId = default;
+    string distance = string.Empty;
+    IEnumerable<IVehicle> vehicles;
+
+    protected override void OnInitialized()
+    {
+        vehicles = BP.GetVehicles();
+    }
+
+    //vehicle
+    void AddVehicle()
+    {
+
+        try
+        {
+            if (registrationNumber == string.Empty)
+                throw new AggregateException();
+
+
+        }
+        catch (Exception)
+        {
+
+            error = "Hej" ;
+        }
+    }
+
+    void ReturnVehicle(int id)
+    {
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+
+            error = ex.Message;
+        }
+    }
+
+    void RentVehicle(int id)
+    {
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+
+            error = ex.Message;
+        }
+    }
+
+}

@@ -1,0 +1,12 @@
+﻿using CarRental.Common.Enums;
+
+namespace CarRental.Common.Classes
+{
+    public class Car : Vehicle
+    {
+        public Car(int id, string make, string registrationNumber, double odometer, double costKm, VehicleStatuses status, VehicleTypes type)
+        : base(id, make, registrationNumber, odometer, costKm, status, type)
+        {
+        }
+    }
+}
